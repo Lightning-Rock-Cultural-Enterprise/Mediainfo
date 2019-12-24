@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
+"""
+MediaInfo.
 
-# author : renpeng
-# github : https://github.com/laodifang
-# description : media information
-# date : 2015-09-24
+author : renpeng
+github : https://github.com/laodifang
+description : media information
+date : 2015-09-24
+"""
+import os
+import sys
+import re
+import subprocess
+import json
 
-import os, sys, re, subprocess, json
 
-class MediaInfo :
+class MediaInfo:
     def __init__(self, **kwargs) :
         self.filename = kwargs.get('filename')
         self.cmd      = kwargs.get('cmd')
@@ -22,7 +29,7 @@ class MediaInfo :
                     self.cmd = cmdpath + '/mediainfo'
                 elif os.path.isdir(cmdpath) and 'ffprobe' in os.listdir(cmdpath) :
                     self.cmd = cmdpath + '/ffprobe'
-                
+
             if self.cmd == None :
                 self.cmd = ''
 
@@ -36,7 +43,7 @@ class MediaInfo :
             self._ffmpegGetInfo()
         elif cmdName == 'mediainfo' :
             self._mediainfoGetInfo()
-        
+
         return self.info
 
 
@@ -90,7 +97,7 @@ class MediaInfo :
             mediaInfo['videoFrameRate']    = infoDict.get('streams')[videoStreamIndex].get('r_frame_rate')
             mediaInfo['videoFrameCount']   = infoDict.get('streams')[videoStreamIndex].get('nb_read_frames')
 
-        if mediaInfo.get('haveAudio') : 
+        if mediaInfo.get('haveAudio') :
             mediaInfo['audioCodec']        = infoDict.get('streams')[audioStreamIndex].get('codec_name')
             mediaInfo['audioCodecProfile'] = infoDict.get('streams')[audioStreamIndex].get('profile')
             mediaInfo['audioDuration']     = infoDict.get('streams')[audioStreamIndex].get('duration')
@@ -127,11 +134,11 @@ class MediaInfo :
 
     def _mediainfoGetInfoRegex(self, sourceString) :
         mediaInfo   = dict()
-        
+
         general     = re.search("(^General\n.*?\n\n)", sourceString, re.S)
         if general :
             generalInfo = general.group(0)
-        
+
             container   = re.search("Format\s*:\s*([\w\_\-\\\/\. ]+)\n",    generalInfo, re.S)
             fileSize    = re.search("File size\s*:\s*(\d+)\.?\d*\n",        generalInfo, re.S)
             duration    = re.search("Duration\s*:\s*(\d+)\.?\d*\n",         generalInfo, re.S)
@@ -192,7 +199,7 @@ class MediaInfo :
             audioChannel      = re.search("Channel\(s\)\s*:\s*(\d+)\n",   audioInfo, re.S)
             samplingRate      = re.search("Sampling rate\s*:\s*([\w\_\-\\\/\@\. ]+)\n", audioInfo, re.S)
             audioSamplingRate = re.search("\d+", samplingRate.group(1), re.S)
-            
+
             if audioCodec :
                 mediaInfo['audioCodec'] = audioCodec.group(0)
             if audioCodecProfile :
