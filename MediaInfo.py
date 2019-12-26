@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-mediainfo.
+multimedia information.
 
-author : renpeng
-github : https://github.com/laodifang
-description : media information
-date : 2015-09-24
+author: renpeng
+author: timmy61109
+github: https://github.com/laodifang
+description: multimedia information
+date: 2015-09-24
 """
 import os
 import re
@@ -36,26 +37,29 @@ class MediaInfo:
         if not os.path.exists(self.filename) or not os.path.exists(self.cmd):
             return None
 
-        cmdName = os.path.basename(self.cmd)
+        cmdname = os.path.basename(self.cmd)
 
-        if cmdName == 'ffprobe':
+        if cmdname == 'ffprobe':
             self._ffmpegGetInfo()
-        elif cmdName == 'mediainfo':
+        elif cmdname == 'mediainfo':
             self._mediainfoGetInfo()
 
         return self.info
 
 
     def _ffmpegGetInfo(self):
-        cmd = self.cmd + ' -loglevel quiet -print_format json -show_format -show_streams -show_error -count_frames -i ' + self.filename
-        outputBytes = ''
+        cmd = self.cmd + \
+            " -loglevel quiet -print_format json" \
+            + " -show_format -show_streams -show_error -count_frames -i " \
+            + self.filename
+        outputbytes = ''
 
         try:
-            outputBytes = subprocess.check_output(cmd, shell = True)
+            outputbytes = subprocess.check_output(cmd, shell = True)
         except subprocess.CalledProcessError as e:
             return ''
 
-        outputText = outputBytes.decode('utf-8')
+        outputText = outputbytes.decode('utf-8')
         self.info  = self._ffmpegGetInfoJson(outputText)
 
     def _ffmpegGetInfoJson(self, sourceString):
@@ -113,16 +117,16 @@ class MediaInfo:
         file = os.path.basename(self.filename)
 
         cmd = self.cmd + ' -f ' + file
-        outputBytes = ''
+        outputbytes = ''
 
         try:
             os.chdir(newPath)
             try:
-                outputBytes = subprocess.check_output(cmd, shell = True)
+                outputbytes = subprocess.check_output(cmd, shell = True)
             except subprocess.CalledProcessError as e:
                 return ''
 
-            outputText = outputBytes.decode('utf-8')
+            outputText = outputbytes.decode('utf-8')
         except IOError:
             os.chdir(prevPath)
             return ''
