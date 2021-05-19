@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-"""
-multimedia information.
+"""multimedia information.
 
 author: renpeng
 author: timmy61109
@@ -98,7 +96,7 @@ class MediaInfo:
             mediaInfo['videoHeight'] = infoDict.get('streams')[videostreamindex].get('height')
             mediaInfo['videoAspectRatio']  = infoDict.get('streams')[videostreamindex].get('display_aspect_ratio')
             mediaInfo['videoFrameRate'] = infoDict.get('streams')[videostreamindex].get('r_frame_rate')
-            mediaInfo['videoFrameCount']   = infoDict.get('streams')[videostreamindex].get('nb_read_frames')
+            mediaInfo['videoFrameCount'] = infoDict.get('streams')[videostreamindex].get('nb_read_frames')
 
         if mediaInfo.get('haveAudio'):
             mediaInfo['audioCodec'] = infoDict.get('streams')[audiostreamindex].get('codec_name')
@@ -107,7 +105,7 @@ class MediaInfo:
             mediaInfo['audioBitrate'] = infoDict.get('streams')[audiostreamindex].get('bit_rate')
             mediaInfo['audioChannel'] = infoDict.get('streams')[audiostreamindex].get('channels')
             mediaInfo['audioSamplingRate'] = infoDict.get('streams')[audiostreamindex].get('sample_rate')
-            mediaInfo['audioFrameCount']   = infoDict.get('streams')[audiostreamindex].get('nb_read_frames')
+            mediaInfo['audioFrameCount'] = infoDict.get('streams')[audiostreamindex].get('nb_read_frames')
 
         return mediaInfo
 
